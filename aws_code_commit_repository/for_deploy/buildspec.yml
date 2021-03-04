@@ -1,0 +1,56 @@
+# A buildspec.yml file informs AWS CodeBuild of all the actions that should be
+# taken during a build execution for our application. We are able to divide the
+# build execution in separate pre-defined phases for logical organization, and
+# list the commands that will be executed on the provisioned build server
+# performing a build execution job.
+version: 0.2
+
+phases:
+  install:
+   commands:
+     - curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+     - unzip awscliv2.zip
+     - which aws
+     - ls -l /usr/local/bin/aws
+     - ./aws/install --bin-dir /usr/local/bin --install-dir /usr/local/aws-cli --update
+  pre_build:
+    commands:
+      - aws --version
+      - docker --version
+      - echo Logging in to Amazon ECR...
+      - echo $AWS_DEFAULT_REGION
+      - echo $AWS_ACCOUNT_ID
+      # Retrieves docker credentials so that the subsequent docker push command is
+      # authorized. Authentication is performed automatically by the AWS CLI
+      # using the AWS credentials associated with the IAM role assigned to the
+      # instances in your AWS CodeBuild project.
+      - echo $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+      #- aws ecr get-login-password.
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com
+      #- aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION
+  build:
+    commands:
+      - docker --version
+      - echo Build started on `date`
+      - echo Building the Docker image...
+      - ls
+      - docker build -t mythicalmysfits/service:latest .
+      # Tag the built docker image using the appropriate Amazon ECR endpoint and relevant
+      # repository for our service container. This ensures that when the docker push
+      # command is executed later, it will be pushed to the appropriate repository.
+      - docker tag mythicalmysfits/service:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/mythicalmysfits/service:latest
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - echo Pushing the Docker image..
+      # Push the image to ECR.
+      - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/mythicalmysfits/service:latest
+      - echo Completed pushing Docker image. Deploying Docker image to AWS Fargate on `date`
+      # Create a artifacts file that contains the name and location of the image
+      # pushed to ECR. This will be used by AWS CodePipeline to automate
+      # deployment of this specific container to Amazon ECS.
+      - printf '[{"name":"MythicalMysfits-Service","imageUri":"%s"}]' $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/mythicalmysfits/service:latest > imagedefinitions.json
+artifacts:
+  # Indicate that the created imagedefinitions.json file created on the previous
+  # line is to be referenceable as an artifact of the build execution job.
+  files: imagedefinitions.json

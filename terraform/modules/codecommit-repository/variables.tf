@@ -1,0 +1,1 @@
+variable "codecommit_repository" {}

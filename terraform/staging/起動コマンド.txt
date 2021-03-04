@@ -1,0 +1,4 @@
+#起動コマンド
+terraform get
+terraform init
+terrafrom plan -var-file=staging.tfvars

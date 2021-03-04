@@ -1,0 +1,21 @@
+[
+    {
+      "name": "MythicalMysfits-Service",
+      "image": "${ecr_image_url}",
+      "portMappings": [
+        {
+          "containerPort": 8080,
+          "protocol": "http"
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "${logs_group}",
+          "awslogs-region": "${region}",
+          "awslogs-stream-prefix": "awslogs-mythicalmysfits-service"
+        }
+      },
+      "essential": true
+    }
+  ]
