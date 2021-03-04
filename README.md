@@ -12,6 +12,7 @@ https://aws.amazon.com/jp/getting-started/hands-on/build-modern-app-fargate-lamb
 terraform - terraform関連のフォルダ  
 aws_license - aws元コードのライセンス  
 app_src - アプリのソースコード  
+最上位のdockerFileなどはterraformをdockerで起動するようのファイル(すぐに作業に取り掛かれるように)
 
 # 進捗
 modelu4まで実装完了
