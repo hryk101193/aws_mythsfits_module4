@@ -1,12 +1,9 @@
-# url
-http://hryk-mythicalmysfits.s3-website-us-east-1.amazonaws.com
+# 概要
+awsのチュートリアルを参考にサーバレスな設計を学習する。  
+https://aws.amazon.com/jp/getting-started/hands-on/build-modern-app-fargate-lambda-dynamodb-python/  
 
-# codecommitにssh接続
-codecommitにssh接続する際は、以下を~/.ssh/configなどに追加
-clone先は「git clone ssh://git-codecommit.(resion"us-east-1"等).amazonaws.com/v1/repos/(codecommitのレポジトリ名)」
+また、そのまま実行しても身につかないため、terraformの学習もかねて、terraformで実装を行う。
 
-ex. git clone ssh://git-codecommit.us-east-1.amazonaws.com/v1/repos/MythicalMysfitsService-Repository .
-
-> Host git-codecommit.*.amazonaws.com
->    User APKXXXXXXXXXXXXXXXXXXX(AIMユーザのAWS CodeCommitの認証情報SSHキー/SSHキーID)
->    IdentityFile ~/.ssh/id_rsa(id_rsaはキーファイル名)
+# 進捗
+modelu4まで実装完了
+動作することを確認した。

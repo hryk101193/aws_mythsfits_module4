@@ -1,5 +1,3 @@
-#動作未確認
-
 resource "aws_dynamodb_table" "myfits_table" {
   name ="MysfitsTable"
   billing_mode = "PROVISIONED"
