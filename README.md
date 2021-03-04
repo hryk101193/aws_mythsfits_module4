@@ -9,9 +9,9 @@ https://aws.amazon.com/jp/getting-started/hands-on/build-modern-app-fargate-lamb
  - DockerFileやCICD等、バージョンによるエラーなどの微修正
 
 # フォルダ
-terraform - terraform関連のフォルダ
-aws_license - aws元コードのライセンス
-app_src - アプリのソースコード
+terraform - terraform関連のフォルダ  
+aws_license - aws元コードのライセンス  
+app_src - アプリのソースコード  
 
 # 進捗
 modelu4まで実装完了
